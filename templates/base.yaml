@@ -28,6 +28,32 @@ Parameters:
     ConstraintDescription: 'Must be an acceptable email address syntax(i.e. joe.smith@sagebase.org)'
 
 Resources:
+  ScheduledRule: 
+    Type: AWS::Events::Rule
+    Properties: 
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(10 minutes)"
+      State: "ENABLED"
+      Targets: 
+        - 
+          Arn: 
+            Fn::GetAtt: 
+              - "LambdaFunction"
+              - "Arn"
+          Id: "TargetFunctionV1"
+
+  PermissionForEventsToInvokeLambda: 
+    Type: AWS::Lambda::Permission
+    Properties: 
+      FunctionName: 
+        Ref: "LambdaFunction"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn: 
+        Fn::GetAtt: 
+          - "ScheduledRule"
+          - "Arn"
+
   MyCloudWatchLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -64,6 +90,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: "/"
+
   BatchInstanceRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -78,12 +105,14 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Path: "/"
+
   BatchInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       Path: "/"
       Roles:
         - !Ref BatchInstanceRole
+
   BatchComputeEnvironment:
     Type: "AWS::Batch::ComputeEnvironment"
     Properties:
@@ -111,6 +140,7 @@ Resources:
           "Department": !Ref Department
           "Project": !Ref Project
           "OwnerEmail": !Ref OwnerEmail
+
   BatchJobQueue:
     Type: "AWS::Batch::JobQueue"
     Properties:
@@ -119,20 +149,26 @@ Resources:
           Order: 1
       Priority: 1
       State: ENABLED
+
   OriginalBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
       Type: container
       ContainerProperties:
         Image: !Ref MainContainer
+          Vcpus: 2
+        Memory: 8192
         Command:
           - /run-original-manifests.sh
+
   LiveBatchJob:
     Type: 'AWS::Batch::JobDefinition'
     Properties:
       Type: container
       ContainerProperties:
         Image: !Ref MainContainer
+        Vcpus: 2
+        Memory: 8192
         Command:
           - /run-live-manifests.sh
 
@@ -150,10 +186,10 @@ Outputs:
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BatchJobQueue'
   OriginalBatchJob:
-    Value: !Ref MainBatchJob
+    Value: !Ref OriginalBatchJob
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-OriginalBatchJob'
   LiveBatchJob:
-    Value: !Ref MainBatchJob
+    Value: !Ref LiveBatchJob
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-LiveBatchJob'
