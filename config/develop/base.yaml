@@ -1,6 +1,6 @@
 ---
 template_path: base.yaml
-stack_name: bsmn-ndaysynapse-manifests
+stack_name: bsmn-ndasyn-manifests
 parameters:
   MainContainer: bsmnetwork/ndasynapse-manifests:latest
   Department: "SysBio"
