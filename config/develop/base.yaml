@@ -1,0 +1,9 @@
+---
+template_path: base.yaml
+stack_name: bsmn-ndaysynapse-manifests
+parameters:
+  MainContainer: bsmnetwork/ndasynapse-manifests:latest
+  Department: "SysBio"
+  Project: "bsmn"
+  OwnerEmail: "kenneth.daily@sagebase.org"
+  VpcName: "sandcastlevpc"
