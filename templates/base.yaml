@@ -28,6 +28,46 @@ Parameters:
     ConstraintDescription: 'Must be an acceptable email address syntax(i.e. joe.smith@sagebase.org)'
 
 Resources:
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "ScheduledRule"
+      ScheduleExpression: "rate(1 day)"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !GetAtt BatchJobQueue.Arn
+          Id: !Sub '${AWS::StackName}-OriginalBatchJob-daily'
+          BatchParameters:
+            ArrayProperties:
+              Size: 3
+            JobDefinition: !Ref OriginalBatchJob
+            JobName: !Sub '${AWS::StackName}-OriginalBatchJob-daily'
+        -
+          Arn: !GetAtt BatchJobQueue.Arn
+          Id: !Sub '${AWS::StackName}-LiveBatchJob-daily'
+          BatchParameters:
+            ArrayProperties:
+              Size: 3
+            JobDefinition: !Ref LiveBatchJob
+            JobName: !Sub '${AWS::StackName}-LiveBatchJob-daily'
+
+  InvokeBatchJobQueuePolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'batch:SubmitJob'
+            Resource: 
+              - !GetAtt BatchJobQueue.Arn
+              - !GetAtt OriginalBatchJob.Arn
+              - !GetAtt LiveBatchJob.Arn
+      Roles:
+        - !Ref BatchInstanceRole
+
   MyCloudWatchLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
