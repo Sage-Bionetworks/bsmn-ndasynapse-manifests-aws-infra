@@ -61,7 +61,7 @@ Resources:
           - Effect: Allow
             Action:
               - 'batch:SubmitJob'
-            Resource: 
+            Resource:
               - !GetAtt BatchJobQueue.Arn
               - !GetAtt OriginalBatchJob.Arn
               - !GetAtt LiveBatchJob.Arn
