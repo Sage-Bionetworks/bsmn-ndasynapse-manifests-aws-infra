@@ -35,13 +35,28 @@ Parameters:
 #       Arn: "arn:aws:iam::055273631518:role/accounts-AWSIAMAdminRole-JL0BF315YDU0"
 
 Resources:
+  PermissionForEventsToInvokeBatch:
+    Type: "AWS::IAM::Role"
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSBatchServiceEventTargetRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: "/"
+
   ScheduledRule:
     Type: AWS::Events::Rule
     Properties:
       Description: "ScheduledRule"
       ScheduleExpression: "rate(1 day)"
       State: "ENABLED"
-      RoleArn: !GetAtt BatchInstanceRole.Arn
+      RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
       Targets:
         -
           Arn: !Ref BatchJobQueue
