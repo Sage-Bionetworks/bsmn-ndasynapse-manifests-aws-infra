@@ -41,6 +41,7 @@ Resources:
       Description: "ScheduledRule"
       ScheduleExpression: "rate(1 day)"
       State: "ENABLED"
+      RoleArn: !GetAtt BatchInstanceRole.Arn
       Targets:
         -
           Arn: !Ref BatchJobQueue
