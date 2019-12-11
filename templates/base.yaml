@@ -234,7 +234,7 @@ Resources:
             Effect: "Allow"
             Principal:
               AWS:
-                # - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
+                - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
                 - !Ref BatchInstanceRole
                 - !FindInMap [AdminRoleArns, !Ref "AWS::AccountId", Arn]
             Action:
