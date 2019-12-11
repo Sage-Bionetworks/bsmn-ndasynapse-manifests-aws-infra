@@ -262,6 +262,17 @@ Resources:
           - '/InfraKey'
       TargetKeyId: !Ref AWSKmsInfraKey
 
+  MySecretSynapseAccountPassword:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: !Sub '${AWS::StackName}-MySecretSynapseAccountPassword'
+      Description: "This secret has a dynamically generated secret password."
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "bsmn-admin"}'
+        GenerateStringKey: "password"
+        PasswordLength: 30
+        ExcludeCharacters: '"@/\'
+
 Outputs:
   MyCloudWatchLogGroup:
     Value: !Ref MyCloudWatchLogGroup
@@ -283,3 +294,7 @@ Outputs:
     Value: !Ref LiveBatchJob
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-LiveBatchJob'
+  MySecretSynapseAccountPassword:
+      Value: !Ref MySecretSynapseAccountPassword
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-MySecretSynapseAccountPassword'
