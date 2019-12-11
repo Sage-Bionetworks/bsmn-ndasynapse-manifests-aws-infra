@@ -170,7 +170,7 @@ Resources:
       Type: container
       ContainerProperties:
         Image: !Ref MainContainer
-          Vcpus: 2
+        Vcpus: 2
         Memory: 8192
         Command:
           - /run-original-manifests.sh
