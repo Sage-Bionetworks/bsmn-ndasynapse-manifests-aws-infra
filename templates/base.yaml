@@ -295,6 +295,6 @@ Outputs:
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-LiveBatchJob'
   MySecretSynapseAccountPassword:
-      Value: !Ref MySecretSynapseAccountPassword
+    Value: !Ref MySecretSynapseAccountPassword
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-MySecretSynapseAccountPassword'
