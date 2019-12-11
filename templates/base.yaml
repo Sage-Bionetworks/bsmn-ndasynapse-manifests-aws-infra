@@ -56,11 +56,11 @@ Resources:
       Description: "ScheduledRule"
       ScheduleExpression: "rate(1 day)"
       State: "ENABLED"
-      RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
       Targets:
         -
           Arn: !Ref BatchJobQueue
           Id: !Sub '${AWS::StackName}-OriginalBatchJob-daily'
+          RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
           BatchParameters:
             ArrayProperties:
               Size: 3
@@ -69,6 +69,7 @@ Resources:
         -
           Arn: !Ref BatchJobQueue
           Id: !Sub '${AWS::StackName}-LiveBatchJob-daily'
+          RoleArn: !GetAtt PermissionForEventsToInvokeBatch.Arn
           BatchParameters:
             ArrayProperties:
               Size: 3
