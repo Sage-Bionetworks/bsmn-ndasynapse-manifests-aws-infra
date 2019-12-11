@@ -43,7 +43,7 @@ Resources:
       State: "ENABLED"
       Targets:
         -
-          Arn: !GetAtt BatchJobQueue.Arn
+          Arn: !Ref BatchJobQueue
           Id: !Sub '${AWS::StackName}-OriginalBatchJob-daily'
           BatchParameters:
             ArrayProperties:
