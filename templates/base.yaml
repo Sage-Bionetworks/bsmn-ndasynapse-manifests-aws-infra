@@ -252,7 +252,7 @@ Resources:
             Principal:
               AWS:
                 - !ImportValue us-east-1-bootstrap-CfServiceRoleArn
-                - !GettAtt BatchInstanceRole.Arn
+                - !GetAtt BatchInstanceRole.Arn
                 - !FindInMap [AdminRoleArns, !Ref "AWS::AccountId", Arn]
             Action:
               - "kms:Encrypt"
