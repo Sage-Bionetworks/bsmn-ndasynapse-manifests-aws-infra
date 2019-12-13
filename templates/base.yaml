@@ -279,17 +279,6 @@ Resources:
           - '/InfraKey'
       TargetKeyId: !Ref AWSKmsInfraKey
 
-  MySecretNDAAccountPassword:
-    Type: 'AWS::SecretsManager::Secret'
-    Properties:
-      Name: !Sub '${AWS::StackName}-MySecretNDAAccountPassword'
-      Description: "This secret has a dynamically generated secret password used to authenticate with the NIMH Data Archive API."
-      GenerateSecretString:
-        SecretStringTemplate: '{"username": "dailyk"}'
-        GenerateStringKey: "password"
-        PasswordLength: 30
-        ExcludeCharacters: '"@/\`'
-
 Outputs:
   MyCloudWatchLogGroup:
     Value: !Ref MyCloudWatchLogGroup
@@ -311,7 +300,3 @@ Outputs:
     Value: !Ref LiveBatchJob
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-LiveBatchJob'
-  MySecretSynapseAccountPassword:
-    Value: !Ref MySecretSynapseAccountPassword
-    Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-MySecretSynapseAccountPassword'
