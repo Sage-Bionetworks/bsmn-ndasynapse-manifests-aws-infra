@@ -213,7 +213,7 @@ Resources:
         Vcpus: 2
         Memory: 8192
         Command:
-          - /run-original-manifests.sh
+          - run-original-manifests.sh
 
   LiveBatchJob:
     Type: 'AWS::Batch::JobDefinition'
@@ -224,7 +224,7 @@ Resources:
         Vcpus: 2
         Memory: 8192
         Command:
-          - /run-live-manifests.sh
+          - run-live-manifests.sh
 
   AWSKmsInfraKey:
     Type: "AWS::KMS::Key"
