@@ -35,6 +35,47 @@ Mappings:
       Arn: "arn:aws:iam::055273631518:role/accounts-AWSIAMAdminRole-JL0BF315YDU0"
 
 Resources:
+
+  JobFailedAlertTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref OwnerEmail
+
+  JobFailedEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: "Event rule for failed jobs."
+      EventPattern:
+        source:
+          - "aws.batch"
+        detail-type:
+          - "Batch Job State Change"
+        resource:
+          - !Ref BatchJobQueue
+        detail:
+          status:
+            - "FAILED"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn: !Ref JobFailedAlertTopic
+          Id: !Sub '${AWS::StackName}-FailedBatchJob-daily'
+
+  EventTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sns:Publish'
+            Resource: '*'
+      Topics:
+        - !Ref JobFailedAlertTopic
+
   PermissionForEventsToInvokeBatch:
     Type: "AWS::IAM::Role"
     Properties:
