@@ -52,11 +52,11 @@ Resources:
           - "aws.batch"
         detail-type:
           - "Batch Job State Change"
-        resource:
-          - !Ref BatchJobQueue
         detail:
           status:
             - "FAILED"
+          jobQueue:
+            - !Ref BatchJobQueue
       State: "ENABLED"
       Targets:
         -
