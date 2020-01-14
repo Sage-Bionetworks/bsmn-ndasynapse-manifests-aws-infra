@@ -85,12 +85,27 @@ Resources:
           - Effect: Allow
             Action:
               - 'batch:SubmitJob'
+              - 'kms:Decrypt'
             Resource:
               - !Ref BatchJobQueue
               - !Ref OriginalBatchJob
               - !Ref LiveBatchJob
       Roles:
-        - !Ref BatchInstanceRole
+      - !Ref BatchInstanceRole
+
+  DecryptSecretsPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'kms:Decrypt'
+            Resource:
+              - "*"
+      Roles:
+      - !Ref BatchInstanceRole
 
   MyCloudWatchLogGroup:
     Type: AWS::Logs::LogGroup
@@ -111,7 +126,7 @@ Resources:
               - 'logs:DescribeLogGroups'
             Resource: !GetAtt MyCloudWatchLogGroup.Arn
       Roles:
-        - !Ref BatchInstanceRole
+      - !Ref BatchInstanceRole
 
   BatchServiceRole:
     Type: "AWS::IAM::Role"
@@ -134,6 +149,7 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -291,7 +307,7 @@ Outputs:
   BatchJobQueue:
     Value: !Ref BatchJobQueue
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-BatchJobQueue'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BSMN-ndasynapse-manifests-BatchJobQueue'
   OriginalBatchJob:
     Value: !Ref OriginalBatchJob
     Export:
