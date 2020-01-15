@@ -132,7 +132,7 @@ Resources:
               - !Ref OriginalBatchJob
               - !Ref LiveBatchJob
       Roles:
-      - !Ref BatchInstanceRole
+        - !Ref BatchInstanceRole
 
   DecryptSecretsPolicy:
     Type: "AWS::IAM::ManagedPolicy"
@@ -146,7 +146,7 @@ Resources:
             Resource:
               - "*"
       Roles:
-      - !Ref BatchInstanceRole
+        - !Ref BatchInstanceRole
 
   MyCloudWatchLogGroup:
     Type: AWS::Logs::LogGroup
@@ -167,7 +167,7 @@ Resources:
               - 'logs:DescribeLogGroups'
             Resource: !GetAtt MyCloudWatchLogGroup.Arn
       Roles:
-      - !Ref BatchInstanceRole
+        - !Ref BatchInstanceRole
 
   BatchServiceRole:
     Type: "AWS::IAM::Role"
