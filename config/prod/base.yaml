@@ -2,7 +2,7 @@
 template_path: base.yaml
 stack_name: bsmnmanifests
 parameters:
-  MainContainer: bsmnetwork/ndasynapse-manifests:latest
+  MainContainer: bsmnetwork/ndasynapse-manifests:v2.2.0
   Department: "SysBio"
   Project: "bsmn"
   OwnerEmail: "kenneth.daily@sagebase.org"
