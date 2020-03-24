@@ -15,6 +15,8 @@ This repository contains CloudFormation infrastructure templates for the process
 
 These tasks are run once per day using an AWS CloudWatch Event Rule that submits an AWS Batch array job.
 
+To look at errors, login to sandbox and use this [link](https://signin.aws.amazon.com/switchrole?roleName=cloudwatch-cross-account-CWCrossAccountSharingRol-7CATGO45E4K6&account=org-sagebase-scicomp) to switch roles and look at CloudWatch Logs.
+
 ## Continuous Integration
 
 We have configured Travis to deploy CF template updates.  Travis deploys using
